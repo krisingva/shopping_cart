@@ -54,11 +54,13 @@ header h2 {
   margin: 0 0 20px 0;
   border-radius: 4px;
   position: relative;
+  color: black
 }
 
 h3 {
   font-size: 18px;
   margin-bottom: 6px;
+  color: black;
 }
 
 .product p {
