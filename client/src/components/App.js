@@ -1,48 +1,72 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddForm from "./AddForm";
 import Cart from "./Cart";
 import ProductListing from "./ProductListing";
-
-let productList = [
-  {
-    id: 1,
-    title: "Amazon Kindle E-reader",
-    quantity: 5,
-    price: 79.99,
-  },
-  {
-    id: 2,
-    title: "Apple 10.5-Inch iPad Pro",
-    quantity: 3,
-    price: 649.99,
-  },
-  {
-    id: 3,
-    title: "Yamaha Portable Keyboard",
-    quantity: 2,
-    price: 155.99,
-  },
-  {
-    id: 4,
-    title: "Tinker, Tailor, Soldier, Spy - A John le Carre Novel",
-    quantity: 12,
-    price: 13.74,
-  },
-];
+import productService from '../services/productService'
 
 const App = () => {
   let [cartItems, setCartItems] = useState([])
-  let [products, setProducts] = useState(productList);
+  let [products, setProducts] = useState([]);
   let [newProduct, setNewProduct] = useState({})
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
 
+  useEffect(() => {
+    (async () => {
+      const products = await productService.getProducts();
+      setProducts(products);
+    })();
+  }, [])
+
+  const handleSubmit = (title, price, quantity) => {
+    const newProduct = {
+      title,
+      price,
+      quantity,
+    };
+
+      (async () => {
+        const addedProduct = await productService.createProduct(newProduct)
+        setProducts(products.concat(addedProduct))
+      })();
+  }
+
+  const handleDelete = (id) => {
+    (async () => {
+      await productService.deleteProduct(id);
+      setProducts(products.filter(prod => prod._id != id));
+    })()
+  }
+
+  const handleUpdate = (id, title, price, quantity) => {
+    const newProduct = {
+      title,
+      price,
+      quantity,
+    };
+
+    (async () => {
+      const updatedProduct = await productService.updateProduct(id, newProduct);
+      setProducts(products.map(prod => {
+        if (prod.id === id) {
+          return updatedProduct
+        } else {
+          return prod;
+        }
+      }))
+    })()
+  }
 
   return (
     <div id="app">
-      <header>
-        <Cart cartItems={cartItems} />
-        <ProductListing products={products} />
-        <AddForm product={newProduct} />
-      </header>
+      <Cart cartItems={cartItems} />
+      <main>
+        <ProductListing products={products} onHandleDelete={handleDelete} onHandleUpdate={handleUpdate} title={title} setTitle={setTitle} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} />
+        <AddForm product={newProduct} onHandleSubmit={handleSubmit} 
+          title={title} setTitle={setTitle} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity}
+        />
+      </main>
     </div>
   );
 };
