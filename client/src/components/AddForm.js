@@ -1,5 +1,10 @@
+import { useState } from 'react'
 
-const AddForm = ({ onHandleSubmit, title, setTitle, price, setPrice, quantity, setQuantity }) => {
+const AddForm = ({ onHandleSubmit }) => {
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value)
   }
@@ -18,12 +23,12 @@ const AddForm = ({ onHandleSubmit, title, setTitle, price, setPrice, quantity, s
     setQuantity('')
   }
 
-  const handleSubmit = (e, clearFields) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    onHandleSubmit(title, price, quantity)
-    if (clearFields) {
-      clearFields()
-    }
+    onHandleSubmit(title, price, quantity, clearFields)
+    // if (clearFields) {
+    //   clearFields()
+    // }
   }
 
   return (
@@ -32,9 +37,9 @@ const AddForm = ({ onHandleSubmit, title, setTitle, price, setPrice, quantity, s
         <a className="button add-product-button">Add A Product</a>
       </p>
       <h3>Add Product</h3>
-      <form onSubmit={(e) => handleSubmit(e, clearFields)}>
+      <form>
         <div className="input-group">
-          <label for="product-name">Product Name</label>
+          <label htmlFor="product-name">Product Name</label>
           <input 
             type="text"
             id="product-name"
@@ -44,7 +49,7 @@ const AddForm = ({ onHandleSubmit, title, setTitle, price, setPrice, quantity, s
         </div>
 
         <div className="input-group">
-          <label for="product-price">Price</label>
+          <label htmlFor="product-price">Price</label>
           <input 
             type="text" 
             id="product-price"
@@ -54,7 +59,7 @@ const AddForm = ({ onHandleSubmit, title, setTitle, price, setPrice, quantity, s
         </div>
 
         <div className="input-group">
-          <label for="product-quantity">Quantity</label>
+          <label htmlFor="product-quantity">Quantity</label>
           <input 
             type="text" 
             id="product-quantity" 
@@ -64,7 +69,7 @@ const AddForm = ({ onHandleSubmit, title, setTitle, price, setPrice, quantity, s
         </div>
 
         <div className="actions form-actions">
-          <button type="submit" className="button">Add</button>
+        <a onClick={handleSubmit} type="submit" className="button">Add</a>
           <a className="button">Cancel</a>
         </div>
       </form>

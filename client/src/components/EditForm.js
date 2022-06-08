@@ -1,4 +1,10 @@
-const EditForm = ({ product, onHandleUpdate, title, setTitle, price, setPrice, quantity, setQuantity }) => {
+import {useState} from 'react';
+
+const EditForm = ({ product, onHandleUpdate, handleShowEdit }) => {
+  const [title, setTitle] = useState(product.title);
+  const [price, setPrice] = useState(product.price);
+  const [quantity, setQuantity] = useState(product.quantity);
+
   const handleTitleChange = (e) => {
       setTitle(e.target.value)
   }
@@ -11,22 +17,33 @@ const EditForm = ({ product, onHandleUpdate, title, setTitle, price, setPrice, q
     setQuantity(e.target.value);
   };
 
-  const handleUpdate = (e) => {
+  const clearFields = () => {
+    setTitle('')
+    setPrice('')
+    setQuantity('')
+  }
+
+  const handleUpdate = (e, clearFields) => {
     e.preventDefault()
-    onHandleUpdate(e.target.id, title, price, quantity)
+    onHandleUpdate(product._id, title, price, quantity)
+    if (clearFields) {
+      clearFields()
+    }
+
+    handleShowEdit()
   }
 
   return (
     <div className="edit-form">
       <h3>Edit Product</h3>
-      <form onSubmit={handleUpdate} id={product._id}>
+      <form onSubmit={(e) => handleUpdate(e, clearFields)}>
         <div className="input-group">
           <label for="product-name">Product Name</label>
           <input
             type="text"
             id="product-name"
             onChange={handleTitleChange}
-            value={product.title}
+            value={title}
           ></input>
         </div>
 
@@ -36,7 +53,7 @@ const EditForm = ({ product, onHandleUpdate, title, setTitle, price, setPrice, q
             type="text"
             id="product-price"
             onChange={handlePriceChange}
-            value={product.price}
+            value={price}
           ></input>
         </div>
 
@@ -46,12 +63,12 @@ const EditForm = ({ product, onHandleUpdate, title, setTitle, price, setPrice, q
             type="text"
             id="product-quantity"
             onChange={handleQuantityChange}
-            value={product.quantity}
+            value={quantity}
           ></input>
         </div>
 
         <div className="actions form-actions">
-          <a className="button">Update</a>
+          <button type="submit" className="button">Update</button>
           <a className="button">Cancel</a>
         </div>
       </form>

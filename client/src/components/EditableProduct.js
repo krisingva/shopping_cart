@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Product from './Product';
 import EditForm from './EditForm';
 
-const EditableProduct = ( {product, onHandleDelete, onHandleUpdate, title, setTitle, price, setPrice, quantity, setQuantity}) => {
+const EditableProduct = ( {product, onHandleDelete, onHandleUpdate, onHandleAddItem}) => {
   let [showEdit, setShowEdit] = useState(false);
 
   const handleShowEdit = () => {
@@ -11,10 +11,20 @@ const EditableProduct = ( {product, onHandleDelete, onHandleUpdate, title, setTi
 
   return (
     <div>
-      <Product product={product} onHandleShowEdit={handleShowEdit} onHandleDelete={onHandleDelete} />
-      {showEdit && <EditForm product={product} onHandleUpdate={onHandleUpdate} title={title} setTitle={setTitle} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} />}
+      <Product
+        product={product}
+        onHandleShowEdit={handleShowEdit}
+        onHandleDelete={onHandleDelete}
+        onHandleAddItem={onHandleAddItem}/>
+      {showEdit && (
+        <EditForm
+          product={product}
+          onHandleUpdate={onHandleUpdate}
+          handleShowEdit={handleShowEdit}
+        />
+      )}
     </div>
-  )
+  );
 }
 
 export default EditableProduct

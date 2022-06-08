@@ -1,6 +1,7 @@
 import CartItem from './CartItem'
 
 const Cart = ({ cartItems }) => {
+  console.log(cartItems)
   if (cartItems.length === 0) {
     return (
       <header>
@@ -21,8 +22,9 @@ const Cart = ({ cartItems }) => {
       <div className="cart">
         <h2>Your Cart</h2>
         <table className="cart-items">
+        <tbody>
           {cartItems.map((item) => {
-            <CartItem title={item.title} price={item.price} quantity={item.quantity} />;
+            <CartItem key={item.productId} title={item.title} price={item.price} quantity={item.quantity} />;
           })}
           <tr>
             <th>Item</th>
@@ -41,10 +43,11 @@ const Cart = ({ cartItems }) => {
           </tr>
 
           <tr>
-            <td colspan="3" className="total">
+            <td colSpan="3" className="total">
               Total: $729.98
             </td>
           </tr>
+          </tbody>
         </table>
         <a className="button checkout">Checkout</a>
       </div>

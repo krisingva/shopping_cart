@@ -3,23 +3,26 @@ import AddForm from "./AddForm";
 import Cart from "./Cart";
 import ProductListing from "./ProductListing";
 import productService from '../services/productService'
+import cartService from '../services/cartService'
 
 const App = () => {
   let [cartItems, setCartItems] = useState([])
   let [products, setProducts] = useState([]);
-  let [newProduct, setNewProduct] = useState({})
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
 
   useEffect(() => {
     (async () => {
       const products = await productService.getProducts();
       setProducts(products);
     })();
+
+    (async () => {
+      const cartItems = await cartService.getCartItems();
+      setCartItems(cartItems);
+    })();
+
   }, [])
 
-  const handleSubmit = (title, price, quantity) => {
+  const handleSubmit = (title, price, quantity, callback) => {
     const newProduct = {
       title,
       price,
@@ -29,6 +32,10 @@ const App = () => {
       (async () => {
         const addedProduct = await productService.createProduct(newProduct)
         setProducts(products.concat(addedProduct))
+
+        if (callback) {
+          callback();
+        }
       })();
   }
 
@@ -49,10 +56,38 @@ const App = () => {
     (async () => {
       const updatedProduct = await productService.updateProduct(id, newProduct);
       setProducts(products.map(prod => {
-        if (prod.id === id) {
+        if (prod._id === id) {
           return updatedProduct
         } else {
           return prod;
+        }
+      }))
+    })()
+  }
+
+  const handleAddItem = (id) => {
+    // const item = products.find(product => product._id === id);
+      
+    (async () => {
+      const data = await cartService.addCartItem(id)
+      // filter cart items + remove item with matching id
+      // let filteredCartItems = cartItems.filter(item => item.productId === id)
+      // setCartItems(filteredCartItems.concat(data.item))
+      setCartItems(cartItems.map(item => {
+        if (item.productId === id) {
+          console.log('first')
+          return data.item
+        } else {
+          console.log('second')
+          return item;
+        }
+      }))
+
+      setProducts(products.map(product => {
+        if (product._id === id) {
+          return data.product;
+        } else {
+          return product;
         }
       }))
     })()
@@ -62,10 +97,13 @@ const App = () => {
     <div id="app">
       <Cart cartItems={cartItems} />
       <main>
-        <ProductListing products={products} onHandleDelete={handleDelete} onHandleUpdate={handleUpdate} title={title} setTitle={setTitle} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity} />
-        <AddForm product={newProduct} onHandleSubmit={handleSubmit} 
-          title={title} setTitle={setTitle} price={price} setPrice={setPrice} quantity={quantity} setQuantity={setQuantity}
+        <ProductListing
+          products={products}
+          onHandleDelete={handleDelete}
+          onHandleUpdate={handleUpdate}
+          onHandleAddItem={handleAddItem}
         />
+        <AddForm onHandleSubmit={handleSubmit} />
       </main>
     </div>
   );
