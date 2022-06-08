@@ -7,18 +7,45 @@ import axios from 'axios';
 
 const App = () => {
   const [productList, setProductList] = useState([])
-  const [cart, setCart] = useState([  {
-    id: 1,
-    title: "Amazon Kindle E-reader",
-    quantity: 1,
-    price: 79.99
-  },
-  {
-    id: 3,
-    title: "Yamaha Portable Keyboard",
-    quantity: 1,
-    price: 155.99
-  }]);
+  const [cart, setCart] = useState([]);
+  const [edit, setEdit] = useState(false);
+
+
+  const updateCart = (item) => {
+    setCart(cart.map(cartItem => {
+      if (cartItem._id === item._id) {
+        return item;
+      } else {
+        return cartItem;
+      }
+    }));
+  }
+
+  const updateProductList = (product) => {
+    setProductList(productList.map(currProduct => {
+      if (currProduct._id === product._id) {
+        return product;
+      } else {
+        return currProduct;
+      }
+    }));
+  }
+
+
+
+  const handleAddToCart = (id)=> {
+    return async () => {
+      try {
+        const results = await axios.post(`/api/add-to-cart`, {productId: id});
+        console.log(results.data.item);
+        console.log(results.data.product);
+        updateCart(results.data.item);
+        updateProductList(results.data.product);
+      } catch(e) {
+        console.error(e);
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,16 +55,52 @@ const App = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    const fetchCart = async () => {
+      const { data } = await axios.get("/api/cart");
+      setCart(data);
+    };
+    fetchCart();
+  }, []);
+
   const handleSubmit = async (newProduct, callback) => {
     try {
       const {data} = await axios.post("/api/products", { ...newProduct });
-      console.log(data);
       setProductList(productList.concat(data));
       if (callback) {
         callback();
       }
     } catch(e) {
         console.error(e);
+    }
+  }
+
+  const handleUpdate = async (id, updatedProduct, callback) => {
+      try {
+        console.log("Hello");
+        const {data} = await axios.put(`/api/products/${id}`, { ...updatedProduct});
+        console.log(data);
+        setProductList(productList.map(product => {
+          if (product._id === id) {
+            return data;
+          } else {
+            return product;
+          }
+        }));
+        if (callback) {
+          callback();
+        }
+      } catch(e) {
+        console.error(e);
+      }
+  }
+
+  const handleCheckout = async () => {
+    try {
+      await axios.post("/api/checkout");
+      setCart([]);
+    } catch(e) {
+      console.error(e);
     }
   }
 
@@ -55,15 +118,17 @@ const App = () => {
     }
   }
 
+
+
   return (
     <>
       <div id="app">
     <header>
-      <Cart cart={cart} />
+      <Cart cart={cart} onCheckout={handleCheckout} />
     </header>
 
     <main>
-      <ProductList productList={productList} onDelete={handleDelete}/>
+      <ProductList productList={productList} onDelete={handleDelete} onAddToCart={handleAddToCart} onUpdate={handleUpdate} />
       <AddProduct onSubmit={handleSubmit}/>
     </main>
   </div>
@@ -72,10 +137,3 @@ const App = () => {
 };
 
 export default App;
-
-// Cart
-  // Cart Item
-// Product list
-  // Product
-  // Edit Product
-// Add product

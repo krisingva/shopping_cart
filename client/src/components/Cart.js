@@ -1,7 +1,7 @@
 import CartItem from './CartItem';
 import CartTotal from './CartTotal';
 
-const Cart = ({ cart }) => {
+const Cart = ({ cart, onCheckout }) => {
   if (cart.length === 0) {
     return (
       <>
@@ -10,13 +10,11 @@ const Cart = ({ cart }) => {
           <h2>Your Cart</h2>
           <p>Your cart is empty</p>
           <p>Total: $0</p>
-          <a class="button checkout disabled">Checkout</a>
+          <button class="button checkout disabled" >Checkout</button>
         </div>
       </>
     );
   }
-
-
 
   return (
     <>
@@ -34,7 +32,7 @@ const Cart = ({ cart }) => {
           })}
           <CartTotal cart={cart}/>
         </table>
-        <a class="button checkout">Checkout</a>
+        <a class="button checkout" onClick={onCheckout} >Checkout</a>
       </div>
     </>
   );

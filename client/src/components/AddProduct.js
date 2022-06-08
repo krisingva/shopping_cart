@@ -4,6 +4,7 @@ const AddProduct = ({ onSubmit }) => {
   const [title, setTitle] = useState("");
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
+  const [addingProduct, setAddingProduct] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,6 +16,23 @@ const AddProduct = ({ onSubmit }) => {
     setQuantity("");
     setPrice("");
   };
+
+  const handleAddingProduct = () => {
+    setAddingProduct(!addingProduct);
+  }
+
+  const handleCancel = () => {
+    if (addingProduct) {
+      setAddingProduct(!addingProduct);
+    }
+  }
+  if (!addingProduct) {
+    return (
+      <div class="actions form-actions">
+        <p><button class="button add-product-button" onClick={handleAddingProduct}>Add A Product</button></p>
+    </div>
+    )
+  }
 
   return (
     <div class="add-form.visible">
@@ -38,7 +56,7 @@ const AddProduct = ({ onSubmit }) => {
 
           <div class="actions form-actions">
             <button class="button" type="submit">Add</button>
-            <button class="button" type="submit">Cancel</button>
+            <button class="button" type="submit" onClick={handleCancel}>Cancel</button>
           </div>
         </form>
       </div>
