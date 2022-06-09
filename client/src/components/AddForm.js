@@ -1,10 +1,15 @@
-import { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { productAdded } from '../actions/productActions';
+import productService from '../services/productService';
 
-const AddForm = ({ onHandleSubmit, addFormVisible, setAddFormVisible }) => {
+const AddForm = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
-
+  let [addFormVisible, setAddFormVisible] = useState(false);
+  
   const handleTitleChange = (e) => {
     setTitle(e.target.value)
   }
@@ -24,9 +29,21 @@ const AddForm = ({ onHandleSubmit, addFormVisible, setAddFormVisible }) => {
     setAddFormVisible(false)
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onHandleSubmit(title, price, quantity, clearFields)
+   const handleSubmit = (e) => {
+     e.preventDefault()
+     
+    const newProduct = {
+      title,
+      price,
+      quantity,
+    };
+
+      (async () => {
+        const addedProduct = await productService.createProduct(newProduct)
+        dispatch(productAdded(addedProduct))
+
+        clearFields()
+      })();
   }
 
   return (

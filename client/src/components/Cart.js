@@ -1,6 +1,22 @@
 import CartItem from './CartItem'
+import cartService from '../services/cartService';
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { cartReceived, checkoutCart } from '../actions/cartActions'
 
-const Cart = ({ cartItems, onCheckoutCart }) => {
+
+const Cart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector(state => state.cart)
+  
+  useEffect(() => {
+    (async () => {
+      const cartItems = await cartService.getCartItems();
+      dispatch(cartReceived(cartItems));
+    })();
+  }, [dispatch])
+
+
   const calculateTotal = () => {
     return cartItems.reduce((accum, val) => {
       accum += val.price * val.quantity;
@@ -9,8 +25,12 @@ const Cart = ({ cartItems, onCheckoutCart }) => {
   };
 
   const handleCheckout = (e) => {
-    e.preventDefault()
-    onCheckoutCart()
+    e.preventDefault();
+    
+    (async () => {
+      await cartService.cartCheckout();
+      dispatch(checkoutCart([]));
+    })();
   }
 
   if (cartItems.length === 0) {
@@ -54,7 +74,9 @@ const Cart = ({ cartItems, onCheckoutCart }) => {
           </td>
         </tr>
         </table>{" "}
-        <a className="button checkout" onClick={handleCheckout}>Checkout</a>
+        <a className="button checkout"
+          onClick={handleCheckout}>Checkout
+          </a>
       </div>
     </header>
   );

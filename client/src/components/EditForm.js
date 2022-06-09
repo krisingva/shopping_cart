@@ -1,9 +1,17 @@
-import {useState} from 'react';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { productEdited } from '../actions/productActions';
+import productService from '../services/productService';
 
-const EditForm = ({ product, onHandleUpdate, handleShowEdit, showEdit, setShowEdit }) => {
+const EditForm = ({ product, showEdit, setShowEdit }) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(product.price);
   const [quantity, setQuantity] = useState(product.quantity);
+
+  const handleShowEdit = () => {
+    setShowEdit(!showEdit);
+  };
 
   const handleTitleChange = (e) => {
       setTitle(e.target.value)
@@ -23,14 +31,21 @@ const EditForm = ({ product, onHandleUpdate, handleShowEdit, showEdit, setShowEd
     setQuantity('')
   }
 
-  const handleUpdate = (e, clearFields) => {
-    e.preventDefault()
-    onHandleUpdate(product._id, title, price, quantity)
-    if (clearFields) {
-      clearFields()
-    }
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    const newProduct = {
+      title,
+      price,
+      quantity,
+    };
 
-    handleShowEdit()
+    (async () => {
+      const updatedProduct = await productService.updateProduct(product._id, newProduct);
+      dispatch(productEdited(updatedProduct));
+    })()
+    
+    clearFields();
+    handleShowEdit();
   }
 
   return (
@@ -71,7 +86,7 @@ const EditForm = ({ product, onHandleUpdate, handleShowEdit, showEdit, setShowEd
           <a className="button" onClick={(e) => handleUpdate(e, clearFields)}>
             Update
           </a>
-          <a className="button" onClick={(e) => setShowEdit(!showEdit)}>Cancel</a>
+          <a className="button" onClick={() => setShowEdit(!showEdit)}>Cancel</a>
         </div>
       </form>
     </div>
