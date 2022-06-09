@@ -37,8 +37,6 @@ const App = () => {
     return async () => {
       try {
         const results = await axios.post(`/api/add-to-cart`, {productId: id});
-        console.log(results.data.item);
-        console.log(results.data.product);
         updateCart(results.data.item);
         updateProductList(results.data.product);
       } catch(e) {

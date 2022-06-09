@@ -1,7 +1,21 @@
 import CartItem from './CartItem';
 import CartTotal from './CartTotal';
+import axios from 'axios';
+import { checkout, productAddedToCart, cartReceived } from "../actions/cartActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Cart = ({ cart, onCheckout }) => {
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
+  useEffect(() => {
+    const fetchCart = async () => {
+      const { data } = await axios.get("/api/cart");
+      dispatch(cartReceived(data));
+    };
+    fetchCart();
+  }, [dispatch]);  
+  
   if (cart.length === 0) {
     return (
       <>
@@ -39,3 +53,31 @@ const Cart = ({ cart, onCheckout }) => {
 }
 
 export default Cart;
+
+// import Product from './Product';
+// import axios from "axios";
+// import { productsReceived, productAdded, productRemoved, productUpdated, productAddedToCart } from "../actions/productListActions";
+// import { useDispatch, useSelector } from "react-redux";
+// import { useEffect } from "react";
+
+// const ProductList = ({ productList, onDelete, onAddToCart, onUpdate }) => {
+//   const dispatch = useDispatch();
+//   const productList = useSelector((state) => state.productList);
+//   useEffect(() => {
+//     const fetchProducts = async () => {
+//       const { data } = await axios.get("/api/products");
+//       dispatch(productsReceived(data));
+//     };
+//     fetchProducts();
+//   }, [dispatch]);
+//   return (
+//     <div class="product-listing">
+//         <h2>Products</h2>
+//         {productList.map(product => {
+//           return <Product key={product.id} product={product} onDelete={onDelete} onAddToCart={onAddToCart} onUpdate={onUpdate}/>;
+//         })}
+//     </div>
+//   )
+// }
+
+// export default ProductList;
