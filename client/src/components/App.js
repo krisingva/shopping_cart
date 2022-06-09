@@ -8,6 +8,7 @@ import cartService from '../services/cartService'
 const App = () => {
   let [cartItems, setCartItems] = useState([])
   let [products, setProducts] = useState([]);
+  let [addFormVisible, setAddFormVisible] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -66,22 +67,24 @@ const App = () => {
   }
 
   const handleAddItem = (id) => {
-    // const item = products.find(product => product._id === id);
-      
     (async () => {
       const data = await cartService.addCartItem(id)
-      // filter cart items + remove item with matching id
-      // let filteredCartItems = cartItems.filter(item => item.productId === id)
-      // setCartItems(filteredCartItems.concat(data.item))
-      setCartItems(cartItems.map(item => {
-        if (item.productId === id) {
-          console.log('first')
-          return data.item
-        } else {
-          console.log('second')
-          return item;
-        }
-      }))
+  
+      if (cartItems.length === 0) {
+        setCartItems([data.item])
+      } else if (cartItems.filter(item => item.productId === id).length === 1) {
+        setCartItems(cartItems.map(item => {
+          if (item.productId === id) {
+            console.log('first')
+            return data.item
+          } else {
+            console.log('second')
+            return item;
+          }
+        }))
+      } else {
+        setCartItems(cartItems.concat(data.item))
+      }
 
       setProducts(products.map(product => {
         if (product._id === id) {
@@ -93,9 +96,14 @@ const App = () => {
     })()
   }
 
+  const checkoutCart = async () => {
+    await cartService.cartCheckout();
+    setCartItems([]) 
+  }
+
   return (
     <div id="app">
-      <Cart cartItems={cartItems} />
+      <Cart cartItems={cartItems} onCheckoutCart={checkoutCart} />
       <main>
         <ProductListing
           products={products}
@@ -103,7 +111,7 @@ const App = () => {
           onHandleUpdate={handleUpdate}
           onHandleAddItem={handleAddItem}
         />
-        <AddForm onHandleSubmit={handleSubmit} />
+        <AddForm onHandleSubmit={handleSubmit} addFormVisible={addFormVisible} setAddFormVisible={setAddFormVisible} />
       </main>
     </div>
   );

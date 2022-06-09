@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const AddForm = ({ onHandleSubmit }) => {
+const AddForm = ({ onHandleSubmit, addFormVisible, setAddFormVisible }) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
@@ -21,20 +21,18 @@ const AddForm = ({ onHandleSubmit }) => {
     setTitle('')
     setPrice('')
     setQuantity('')
+    setAddFormVisible(false)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     onHandleSubmit(title, price, quantity, clearFields)
-    // if (clearFields) {
-    //   clearFields()
-    // }
   }
 
   return (
-    <div className="add-form visible">
+    <div className={`add-form ${addFormVisible ? 'visible' : ''}`}>
       <p>
-        <a className="button add-product-button">Add A Product</a>
+        <a className="button add-product-button" onClick={() => setAddFormVisible(!addFormVisible)}>Add A Product</a>
       </p>
       <h3>Add Product</h3>
       <form>
@@ -70,7 +68,7 @@ const AddForm = ({ onHandleSubmit }) => {
 
         <div className="actions form-actions">
         <a onClick={handleSubmit} type="submit" className="button">Add</a>
-          <a className="button">Cancel</a>
+          <a className="button" onClick={clearFields}>Cancel</a>
         </div>
       </form>
     </div>

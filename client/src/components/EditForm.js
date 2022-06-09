@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-const EditForm = ({ product, onHandleUpdate, handleShowEdit }) => {
+const EditForm = ({ product, onHandleUpdate, handleShowEdit, showEdit, setShowEdit }) => {
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(product.price);
   const [quantity, setQuantity] = useState(product.quantity);
@@ -36,9 +36,9 @@ const EditForm = ({ product, onHandleUpdate, handleShowEdit }) => {
   return (
     <div className="edit-form">
       <h3>Edit Product</h3>
-      <form onSubmit={(e) => handleUpdate(e, clearFields)}>
+      <form>
         <div className="input-group">
-          <label for="product-name">Product Name</label>
+          <label htmlFor="product-name">Product Name</label>
           <input
             type="text"
             id="product-name"
@@ -58,7 +58,7 @@ const EditForm = ({ product, onHandleUpdate, handleShowEdit }) => {
         </div>
 
         <div className="input-group">
-          <label for="product-quantity">Quantity</label>
+          <label htmlFor="product-quantity">Quantity</label>
           <input
             type="text"
             id="product-quantity"
@@ -68,8 +68,10 @@ const EditForm = ({ product, onHandleUpdate, handleShowEdit }) => {
         </div>
 
         <div className="actions form-actions">
-          <button type="submit" className="button">Update</button>
-          <a className="button">Cancel</a>
+          <a className="button" onClick={(e) => handleUpdate(e, clearFields)}>
+            Update
+          </a>
+          <a className="button" onClick={(e) => setShowEdit(!showEdit)}>Cancel</a>
         </div>
       </form>
     </div>

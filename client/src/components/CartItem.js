@@ -1,11 +1,11 @@
 const CartItem = ({ title, price, quantity }) => {
   return (
     <tr>
-      <th>{title}</th>
-      <th>{quantity}</th>
-      <th>{price}</th>
+      <td>{title}</td>
+      <td>{quantity}</td>
+      <td>{price}</td>
     </tr>
-   )
+  );
 }
 
 export default CartItem
