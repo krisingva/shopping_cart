@@ -1,11 +1,11 @@
 import CartItem from './CartItem';
 import CartTotal from './CartTotal';
 import axios from 'axios';
-import { checkout, productAddedToCart, cartReceived } from "../actions/cartActions";
+import { checkout, cartReceived } from "../actions/cartActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-const Cart = ({ cart, onCheckout }) => {
+const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   useEffect(() => {
@@ -14,8 +14,13 @@ const Cart = ({ cart, onCheckout }) => {
       dispatch(cartReceived(data));
     };
     fetchCart();
-  }, [dispatch]);  
-  
+  }, [dispatch]);
+
+  const handleCheckout = async () => {
+      await axios.post("/api/checkout");
+      dispatch(checkout());
+  }
+
   if (cart.length === 0) {
     return (
       <>
@@ -46,7 +51,7 @@ const Cart = ({ cart, onCheckout }) => {
           })}
           <CartTotal cart={cart}/>
         </table>
-        <a class="button checkout" onClick={onCheckout} >Checkout</a>
+        <button class="button checkout" onClick={handleCheckout} >Checkout</button>
       </div>
     </>
   );

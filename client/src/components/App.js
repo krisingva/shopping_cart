@@ -1,9 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Cart from './Cart';
 import ProductList from './ProductList';
 import AddProduct from './AddProduct';
 import axios from 'axios';
+import { productsReceived } from "../actions/productListActions";
 
 const App = () => {
   const [productList, setProductList] = useState([])
@@ -11,6 +13,7 @@ const App = () => {
   const [edit, setEdit] = useState(false);
 
 
+  const dispatch = useDispatch();
   const updateCart = (item) => {
     setCart(cart.map(cartItem => {
       if (cartItem._id === item._id) {
@@ -48,10 +51,10 @@ const App = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const { data } = await axios.get("/api/products");
-      setProductList(data);
+      dispatch(productsReceived(data));
     };
     fetchProducts();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -59,7 +62,7 @@ const App = () => {
       setCart(data);
     };
     fetchCart();
-  }, []);
+  }, [dispatch]);
 
   const handleSubmit = async (newProduct, callback) => {
     try {
@@ -122,11 +125,11 @@ const App = () => {
     <>
       <div id="app">
     <header>
-      <Cart cart={cart} onCheckout={handleCheckout} />
+      <Cart onCheckout={handleCheckout} />
     </header>
 
     <main>
-      <ProductList productList={productList} onDelete={handleDelete} onAddToCart={handleAddToCart} onUpdate={handleUpdate} />
+      <ProductList onDelete={handleDelete} onAddToCart={handleAddToCart} onUpdate={handleUpdate} />
       <AddProduct onSubmit={handleSubmit}/>
     </main>
   </div>

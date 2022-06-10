@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { productAdded } from "../actions/productListActions";
+import axios from "axios";
 
 const AddProduct = ({ onSubmit }) => {
   const [title, setTitle] = useState("");
@@ -6,9 +9,19 @@ const AddProduct = ({ onSubmit }) => {
   const [price, setPrice] = useState("");
   const [addingProduct, setAddingProduct] = useState(false);
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   onSubmit({title, quantity, price}, resetInputs());
+  // }
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({title, quantity, price}, resetInputs());
+    const {data} = await axios.post("/api/products", { title, quantity, price });
+    dispatch(productAdded(data));
+    resetInputs();
+    handleAddingProduct();
   }
 
   const resetInputs = () => {
@@ -36,7 +49,7 @@ const AddProduct = ({ onSubmit }) => {
 
   return (
     <div class="add-form.visible">
-        <p><a class="button add-product-button">Add A Product</a></p>
+        <p><button class="button add-product-button">Add A Product</button></p>
         <h3>Add Product</h3>
         <form onSubmit={handleSubmit}>
           <div class="input-group">

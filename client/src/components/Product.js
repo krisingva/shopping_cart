@@ -1,5 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { productAdded, productRemoved, productUpdated, productAddedToCart } from "../actions/productListActions";
+import axios from 'axios';
 
 
 const Product = ( {product, onDelete, onAddToCart, onUpdate } ) => {
@@ -8,14 +11,37 @@ const Product = ( {product, onDelete, onAddToCart, onUpdate } ) => {
   const [price, setPrice] = useState(product.price);
   const [edit, setEdit] = useState(false);
 
+  //
+
+  const dispatch = useDispatch();
+
+  const handleDelete = async (e) => {
+    const id = product._id;
+    await axios.delete(`/api/products/${id}`);
+    dispatch(productRemoved(id));
+  };
+
+  const handleAddToCart = async ()=> {
+    const id = product._id;
+    if (product.quantity) {
+      const results = await axios.post(`/api/add-to-cart`, {productId: id});
+      console.log('results', results);
+      dispatch(productAddedToCart(results.data));
+    }
+  }
+
   const handleDisplayEdit = () => {
     setEdit(!edit);
   }
 
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    onUpdate(product._id, {title, quantity, price}, handleDisplayEdit);
-  }
+  const handleUpdate = async (e) => {
+      e.preventDefault();
+      const {data} = await axios.put(`/api/products/${product._id}`,  {title, quantity, price});
+      dispatch(productUpdated(data));
+
+
+      handleDisplayEdit();
+}
 
   if (!edit) {
     return (
@@ -25,10 +51,10 @@ const Product = ( {product, onDelete, onAddToCart, onUpdate } ) => {
         <p class="price">{product.price}</p>
         <p class="quantity">{product.quantity} left in stock</p>
         <div class="actions product-actions">
-          <button class="button add-to-cart" onClick={onAddToCart(product._id)}>Add to Cart</button>
+          <button class="button add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
           <button class="button edit" onClick={handleDisplayEdit}>Edit</button>
         </div>
-        <button class="delete-button" onClick={onDelete(product._id)}><span>X</span></button>
+        <button class="delete-button" onClick={handleDelete}><span>X</span></button>
       </div>
     </div>
     );

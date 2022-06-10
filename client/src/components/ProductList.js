@@ -1,10 +1,10 @@
 import Product from './Product';
 import axios from "axios";
-import { productsReceived, productAdded, productRemoved, productUpdated, productAddedToCart } from "../actions/productListActions";
+import { productsReceived} from "../actions/productListActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
-const ProductList = ({ productList, onDelete, onAddToCart, onUpdate }) => {
+const ProductList = ({ onDelete, onAddToCart, onUpdate }) => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   useEffect(() => {
