@@ -1,8 +1,6 @@
 import { useDispatch } from 'react-redux';
-import { productDeleted, productEdited } from '../actions/productActions';
-import { cartItemAdded } from '../actions/cartActions';
-import productService from '../services/productService';
-import cartService from "../services/cartService";
+import { deleteProduct, editProduct } from "../features/products";
+import { addToCart } from "../features/cart";
 
 const Product = ({ product, onHandleShowEdit }) => {
   const dispatch = useDispatch();
@@ -13,21 +11,13 @@ const Product = ({ product, onHandleShowEdit }) => {
   };
 
   const handleDelete = (e) => {
-    e.preventDefault();
-
-    (async () => {
-      await productService.deleteProduct(product._id);
-      dispatch(productDeleted(product));
-    })()
+    e.preventDefault(); 
+    dispatch(deleteProduct({ product }))
   };
 
   const handleAddToCart = (e) => {
     e.preventDefault();
-    (async () => {
-      const data = await cartService.addCartItem(product._id)
-      dispatch(cartItemAdded(data.item))
-      dispatch(productEdited(data.product))
-    })()
+    dispatch(addToCart({ product }))
   }
 
   return (

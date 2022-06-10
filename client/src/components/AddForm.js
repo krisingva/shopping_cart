@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { productAdded } from '../actions/productActions';
-import productService from '../services/productService';
+import { addProduct } from '../features/products';
 
 const AddForm = () => {
   const dispatch = useDispatch();
@@ -38,12 +37,8 @@ const AddForm = () => {
       quantity,
     };
 
-      (async () => {
-        const addedProduct = await productService.createProduct(newProduct)
-        dispatch(productAdded(addedProduct))
-
-        clearFields()
-      })();
+    dispatch(addProduct({ newProduct }))
+    clearFields()
   }
 
   return (

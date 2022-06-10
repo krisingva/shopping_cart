@@ -1,7 +1,6 @@
-import productService from '../services/productService';
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import { productsReceived } from '../actions/productActions'
+import { fetchProducts } from '../features/products';
 import EditableProduct from "./EditableProduct";
 
 const ProductListing = () => {
@@ -9,10 +8,7 @@ const ProductListing = () => {
   const products = useSelector(state => state.products);
 
   useEffect(() => {
-    (async () => {
-      const receivedProducts = await productService.getProducts();
-      dispatch(productsReceived(receivedProducts))
-    })();
+    dispatch(fetchProducts());
   }, [dispatch])
 
     return (

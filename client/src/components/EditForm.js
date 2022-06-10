@@ -1,7 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useState } from 'react';
-import { productEdited } from '../actions/productActions';
-import productService from '../services/productService';
+import { editProduct } from '../features/products';
 
 const EditForm = ({ product, showEdit, setShowEdit }) => {
   const dispatch = useDispatch()
@@ -39,10 +38,7 @@ const EditForm = ({ product, showEdit, setShowEdit }) => {
       quantity,
     };
 
-    (async () => {
-      const updatedProduct = await productService.updateProduct(product._id, newProduct);
-      dispatch(productEdited(updatedProduct));
-    })()
+    dispatch(editProduct({ product, newProduct }));
     
     clearFields();
     handleShowEdit();
