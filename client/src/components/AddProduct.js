@@ -3,16 +3,11 @@ import { useDispatch } from "react-redux";
 import { productAdded } from "../actions/productListActions";
 import axios from "axios";
 
-const AddProduct = ({ onSubmit }) => {
+const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [addingProduct, setAddingProduct] = useState(false);
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   onSubmit({title, quantity, price}, resetInputs());
-  // }
 
   const dispatch = useDispatch();
 

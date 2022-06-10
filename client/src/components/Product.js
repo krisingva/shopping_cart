@@ -1,17 +1,15 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { productAdded, productRemoved, productUpdated, productAddedToCart } from "../actions/productListActions";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { productRemoved, productUpdated, productAddedToCart } from "../actions/productListActions";
 import axios from 'axios';
 
 
-const Product = ( {product, onDelete, onAddToCart, onUpdate } ) => {
+const Product = ( {product } ) => {
   const [title, setTitle] = useState(product.title);
   const [quantity, setQuantity] = useState(product.quantity);
   const [price, setPrice] = useState(product.price);
   const [edit, setEdit] = useState(false);
-
-  //
 
   const dispatch = useDispatch();
 
@@ -26,6 +24,7 @@ const Product = ( {product, onDelete, onAddToCart, onUpdate } ) => {
     if (product.quantity) {
       const results = await axios.post(`/api/add-to-cart`, {productId: id});
       console.log('results', results);
+      setQuantity(quantity - 1);
       dispatch(productAddedToCart(results.data));
     }
   }
