@@ -27,8 +27,10 @@ const cartCheckout = async () => {
   }
 }
 
-export default {
+const cartService = {
   getCartItems,
   addCartItem,
   cartCheckout
 }
+
+export default cartService

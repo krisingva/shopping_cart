@@ -4,10 +4,7 @@ import { cartItemAdded } from '../actions/cartActions';
 import productService from '../services/productService';
 import cartService from "../services/cartService";
 
-const Product = ({
-  product,
-  onHandleShowEdit,
-}) => {
+const Product = ({ product, onHandleShowEdit }) => {
   const dispatch = useDispatch();
   
   const handleEditProduct = (e) => {
@@ -40,14 +37,14 @@ const Product = ({
       <p className="quantity">{product.quantity} left in stock</p>
       <div className="actions product-actions">
         <a
-          className={`button add-to-cart ${product.quantity === 0 ? "disabled" : ""}`} onClick={handleAddToCart} >
+          href="/#" className={`button add-to-cart ${product.quantity === 0 ? "disabled" : ""}`} onClick={handleAddToCart} >
           Add to Cart
         </a>
-        <a className="button edit" onClick={handleEditProduct}>
+        <a href="/#" className="button edit" onClick={handleEditProduct}>
           Edit
         </a>
       </div>
-      <a className="delete-button" onClick={handleDelete}>
+      <a href="/#" className="delete-button" onClick={handleDelete}>
         <span>X</span>
       </a>
     </div>

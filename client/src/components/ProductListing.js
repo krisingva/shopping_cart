@@ -13,7 +13,7 @@ const ProductListing = () => {
       const receivedProducts = await productService.getProducts();
       dispatch(productsReceived(receivedProducts))
     })();
-  }, [])
+  }, [dispatch])
 
     return (
       <div className="product-listing">

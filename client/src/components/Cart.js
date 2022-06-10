@@ -41,7 +41,7 @@ const Cart = () => {
           <h2>Your Cart</h2>
           <p>Your cart is empty</p>
           <p>Total: $0</p>
-          <a className="button checkout disabled">Checkout</a>
+          <a href="/#" className="button checkout disabled">Checkout</a>
         </div>
       </header>
     );
@@ -53,28 +53,30 @@ const Cart = () => {
       <div className="cart">
         <h2>Your Cart</h2>
         <table className="cart-items">
+          <tbody>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+            {cartItems.map((item) => {
+              return (
+                <CartItem
+                  key={item.productId}
+                  title={item.title}
+                  price={item.price}
+                  quantity={item.quantity}
+                />
+              );
+            })}
           <tr>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th>Price</th>
+            <td colSpan="3" className="total">
+              Total: ${calculateTotal()}
+            </td>
           </tr>
-          {cartItems.map((item) => {
-            return (
-              <CartItem
-                key={item.productId}
-                title={item.title}
-                price={item.price}
-                quantity={item.quantity}
-              />
-            );
-          })}
-        <tr>
-          <td colSpan="3" className="total">
-            Total: ${calculateTotal()}
-          </td>
-        </tr>
+        </tbody>
         </table>{" "}
-        <a className="button checkout"
+        <a href="/#" className="button checkout"
           onClick={handleCheckout}>Checkout
           </a>
       </div>

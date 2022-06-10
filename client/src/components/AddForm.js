@@ -49,7 +49,7 @@ const AddForm = () => {
   return (
     <div className={`add-form ${addFormVisible ? 'visible' : ''}`}>
       <p>
-        <a className="button add-product-button" onClick={() => setAddFormVisible(!addFormVisible)}>Add A Product</a>
+        <a href="/#" className="button add-product-button" onClick={() => setAddFormVisible(!addFormVisible)}>Add A Product</a>
       </p>
       <h3>Add Product</h3>
       <form>
@@ -84,8 +84,8 @@ const AddForm = () => {
         </div>
 
         <div className="actions form-actions">
-        <a onClick={handleSubmit} type="submit" className="button">Add</a>
-          <a className="button" onClick={clearFields}>Cancel</a>
+        <a href="/#" onClick={handleSubmit} type="submit" className="button">Add</a>
+          <a href="/#" className="button" onClick={clearFields}>Cancel</a>
         </div>
       </form>
     </div>

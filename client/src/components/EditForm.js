@@ -63,7 +63,7 @@ const EditForm = ({ product, showEdit, setShowEdit }) => {
         </div>
 
         <div className="input-group">
-          <label for="product-price">Price</label>
+          <label htmlFor="product-price">Price</label>
           <input
             type="text"
             id="product-price"
@@ -83,10 +83,12 @@ const EditForm = ({ product, showEdit, setShowEdit }) => {
         </div>
 
         <div className="actions form-actions">
-          <a className="button" onClick={(e) => handleUpdate(e, clearFields)}>
+          <a href="/#" className="button" onClick={(e) => handleUpdate(e, clearFields)}>
             Update
           </a>
-          <a className="button" onClick={() => setShowEdit(!showEdit)}>Cancel</a>
+          <a href="/#" className="button" onClick={() => setShowEdit(!showEdit)}>
+            Cancel
+          </a>
         </div>
       </form>
     </div>
