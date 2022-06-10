@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { deleteProduct, editProduct } from "../features/products";
+import { deleteProduct } from "../features/products";
 import { addToCart } from "../features/cart";
 
 const Product = ({ product, onHandleShowEdit }) => {
