@@ -1,37 +1,42 @@
-import {useState} from 'react';
+import { useState, useContext } from 'react';
+import { updateProduct, ProductContext } from '../context/products-context';
 
-const EditForm = ({ product, onHandleUpdate, handleShowEdit, showEdit, setShowEdit }) => {
+const EditForm = ({ product, onHandleShowEdit }) => {
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(product.price);
   const [quantity, setQuantity] = useState(product.quantity);
 
+  const { dispatch: productDispatch } = useContext(ProductContext);
+
   const handleTitleChange = (e) => {
-      setTitle(e.target.value)
-  }
-    
+    setTitle(e.target.value);
+  };
+
   const handlePriceChange = (e) => {
     setPrice(e.target.value);
   };
-  
+
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
   };
 
   const clearFields = () => {
-    setTitle('')
-    setPrice('')
-    setQuantity('')
-  }
+    setTitle("");
+    setPrice("");
+    setQuantity("");
+  };
 
   const handleUpdate = (e, clearFields) => {
-    e.preventDefault()
-    onHandleUpdate(product._id, title, price, quantity)
-    if (clearFields) {
-      clearFields()
-    }
+    e.preventDefault();
 
-    handleShowEdit()
-  }
+    const updatedProduct = {
+      title,
+      price,
+      quantity,
+    };
+
+    updateProduct({ updatedProduct }, productDispatch, clearFields);
+  };
 
   return (
     <div className="edit-form">
@@ -71,11 +76,13 @@ const EditForm = ({ product, onHandleUpdate, handleShowEdit, showEdit, setShowEd
           <a className="button" onClick={(e) => handleUpdate(e, clearFields)}>
             Update
           </a>
-          <a className="button" onClick={(e) => setShowEdit(!showEdit)}>Cancel</a>
+          <a className="button" onClick={onHandleShowEdit}>
+            Cancel
+          </a>
         </div>
       </form>
     </div>
   );
-}
+};
 
 export default EditForm;

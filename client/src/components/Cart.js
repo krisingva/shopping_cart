@@ -1,6 +1,10 @@
-import CartItem from './CartItem'
+import { useContext } from "react";
+import { CartContext, checkoutCartItems } from "../context/cart-context";
+import CartItem from "./CartItem";
 
-const Cart = ({ cartItems, onCheckoutCart }) => {
+const Cart = () => {
+  const {cartItems, dispatch: cartDispatch} = useContext(CartContext)
+
   const calculateTotal = () => {
     return cartItems.reduce((accum, val) => {
       accum += val.price * val.quantity;
@@ -10,7 +14,7 @@ const Cart = ({ cartItems, onCheckoutCart }) => {
 
   const handleCheckout = (e) => {
     e.preventDefault()
-    onCheckoutCart()
+    checkoutCartItems(cartDispatch)
   }
 
   if (cartItems.length === 0) {

@@ -1,4 +1,11 @@
-const Product = ({ product, onHandleShowEdit, onHandleDelete, onHandleAddItem }) => {
+import { useContext } from 'react';
+import { deleteProduct, ProductContext } from '../context/products-context';
+import { CartContext, addItemToCart } from "../context/cart-context";
+
+const Product = ({ product, onHandleShowEdit }) => {
+  const {dispatch: productDispatch} = useContext(ProductContext);
+  const {dispatch: cartItemDispatch} = useContext(CartContext);
+  
   const handleEditProduct = (e) => {
     e.preventDefault()
     onHandleShowEdit()
@@ -6,12 +13,12 @@ const Product = ({ product, onHandleShowEdit, onHandleDelete, onHandleAddItem })
 
   const handleDelete = (e) => {
     e.preventDefault()
-    onHandleDelete(product._id)
+    deleteProduct(product, productDispatch)
   }
 
   const handleAddToCart = (e) => {
     e.preventDefault()
-    onHandleAddItem(product._id)
+    addItemToCart(product, cartItemDispatch, productDispatch)
   }
 
   return (

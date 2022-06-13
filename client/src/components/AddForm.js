@@ -1,9 +1,14 @@
 import { useState } from 'react'
+import { addProduct, ProductContext } from '../context/products-context';
+import { useContext } from 'react';
 
-const AddForm = ({ onHandleSubmit, addFormVisible, setAddFormVisible }) => {
+const AddForm = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [addFormVisible, setAddFormVisible] = useState(false);
+  const { dispatch: productDispatch } = useContext(ProductContext);
+
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value)
@@ -25,8 +30,8 @@ const AddForm = ({ onHandleSubmit, addFormVisible, setAddFormVisible }) => {
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    onHandleSubmit(title, price, quantity, clearFields)
+   e.preventDefault();
+   addProduct({ title, price, quantity }, productDispatch, clearFields)
   }
 
   return (
