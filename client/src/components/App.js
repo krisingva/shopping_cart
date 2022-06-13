@@ -7,9 +7,7 @@ import { CartProvider } from "../context/cart-context";
 const App = () => {
   return (
     <div id="app">
-      <CartProvider>
         <Cart />
-      </CartProvider>
       <main>
         <ProductListing />
         <AddForm />
